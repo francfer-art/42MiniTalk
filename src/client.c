@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
@@ -6,11 +6,11 @@
 /*   By: francfer <francfer@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:12:08 by mulken            #+#    #+#             */
-/*   Updated: 2024/01/31 16:47:31 by francfer         ###   ########.fr       */
+/*   Updated: 2024/02/21 11:47:23 by francfer         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
-#include "minitalk.h"
+#include "../include/minitalk.h"
 
 int	ft_atoi(char *str)
 {
@@ -37,7 +37,7 @@ int	ft_atoi(char *str)
 	return (res * s);
 }
 
-void	ft_send_signal(int pid, char *str)
+void	sending_signal(int pid, char *str)
 {
 	int				i;
 	unsigned char	c;
@@ -62,11 +62,16 @@ int	main(int argc, char *argv[])
 {
 	int	pid;
 
+	pid = ft_atoi(argv[1]);
 	if (argc != 3)
 	{
 		ft_printf("Error: wrong number of arguments\n");
 		return (0);
 	}
-	pid = ft_atoi(argv[1]);
-	ft_send_signal(pid, argv[2]);
+	else if (pid <= 0)
+	{
+		ft_printf("Error: Wrong PID!\n");
+		return (0);
+	}
+	sending_signal(pid, argv[2]);
 }

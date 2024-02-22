@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mulken <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: francfer <francfer@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:15:33 by mulken            #+#    #+#             */
-/*   Updated: 2023/01/30 11:15:37 by mulken           ###   ########.fr       */
+/*   Updated: 2024/02/21 11:04:50 by francfer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 # include <signal.h>
 # include <unistd.h>
-# include "./ft_printf/ft_printf.h"
+# include "../Printf/ft_printf.h"
 
 int		ft_atoi(char *str);
-void	ft_bit_write(int x);
-void	ft_signal_control(int x);
-void	ft_send_signal(int pid, char *str);
+void	writing_signal(int x);
+void	handler(int x);
+void	sending_signal(int pid, char *str);
 
 #endif

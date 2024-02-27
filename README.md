@@ -9,93 +9,92 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Score-Evaluating-brightyellow" alt="MiniTalk Score">
+  <img src="https://img.shields.io/badge/Score-Evaluating-brightgreen" alt="MiniTalk Score">
 </p>
 
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Features](#features)
-- [Prerequisites](#Prerequisites)
-- [Usage](#Usage)
-- [Getting Started](#getting-started)
+- [ErrorHandling](#error-handling)
+- [Global Variables](#global-variables)
+- [Allowed Functions](#allowed-functions)
+- [Mandatory Part](#mandatory-part)
 - [Usage](#usage)
 - [Avaliable Parameters](#avaliable-parameters)
-- [Bonus](#bonus)
+- [Bonus Part](#bonus-part)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Introduction
 
-Fract'ol is a project in Computer Graphics focusing on rendering fractals using the MiniLibX library. This program allows users to explore and visualize the Mandelbrot set and the Julia set, with options to customize the Julia set by passing different parameters.
+This program consists of a client and a server component designed for communication using UNIX signals. Below are the specifications and guidelines for implementing the client-server communication.
 
-## Features
+## Error Handling
+
+Thoroughly handle errors to ensure the program does not quit unexpectedly (e.g., segmentation fault, bus error, double free, etc.).
+Ensure your program does not have memory leaks.
+
+## Global Variables
+
+You can have one global variable per program (one for the client and one for the server), but their use must be justified.
+
+## Allowed Functions
+
+You are allowed to use the following functions to complete the mandatory part:
 
 ```
-Renders the Mandelbrot set and the Julia set.
-Zoom in and out using the mouse wheel, allowing exploration within the limits of the computer.
-Creates different Julia sets by passing parameters through the command line.
-Smooth window management, including switching between windows and minimizing.
-Provides a clean exit when pressing ESC or clicking on the window's close button.
-Utilizes colors to represent the depth of each fractal, with options for psychedelic effects.
+write
+ft_printf and any equivalent you coded
+signal
+sigemptyset
+sigaddset
+sigaction
+kill
+getpid
+malloc
+free
+pause
+sleep
+usleep
+exit
 ```
 
-## Prerequisites
+## Mandatory Part
 
-MiniLibX library. You can use either the version available on the school machines or install it using its sources.
+Server:
+
+The server must be started first and print its PID after launch.
+It must be able to receive strings from multiple clients in succession without needing to restart.
+The server must display received strings quickly. A delay of 1 second for displaying 100 characters is considered too long.
+
+Client:
+
+Takes two parameters: the server PID and the string to send.
+Sends the provided string parameter to the server using UNIX signals.
+
+Communication:
+
+Communication between the client and server should only use UNIX signals (SIGUSR1 and SIGUSR2).
+Ensure robust error handling throughout both client and server components.
+Implement efficient and quick string processing and communication mechanisms.
+
 
 ## Usage
 
-```
-Clone the repository.
-Make sure you have Xquartz library installed in your machine.
-Compile the program using the provided Makefile.
-Run the executable with optional parameters to specify the type of fractal to display and additional rendering options.
-```
-
-## Avaliable Parameters
-
-If no parameter is provided or if the parameter is invalid, the program displays a list of available parameters and exits properly.
-Additional parameters can be used as rendering options.
-
-## Usage Example
-
-```bash
-make
-./fractol [fractal_type] [rendering_options]
-```
-```
-Replace [fractal_type] with the type of fractal to display (e.g., mandelbrot, julia).
-Replace [rendering_options] with any additional rendering options (optional).
-```
-
-## Controls 🕹
-```
-Use the mouse wheel to zoom in and out.
-Press ESC to close the window and quit the program cleanly.
-Click on the close button on the window's frame to close the window and quit the program cleanly.
-W / ⭡: Up
-S / ⭣: Down
-A / ⭠: Left
-D / ⭢: Right
-+ / -: Increase / Decrease Rendering Iterations
-E : Enable / Disable Cursor Julia Tracking
-```
+After compiling, start the server using ./server.
+Note the server PID printed.
+Start the client using ./client <server_PID> "<string_to_send>".
+The server should promptly display the received string.
 
 ## Bonus Features
 
-Additional Fractal: You can explore more than just the Mandelbrot and Julia sets with over a hundred different types of fractals available online. In this case i added burning, rose and newton sets!
-Dynamic Zoom: The zoom follows the actual mouse position, providing a more intuitive exploration experience.
-View Movement: Navigate through the fractals by pressing the arrow keys to move the view.
-Color Range Shift: The color range dynamically shifts, enhancing the visual appeal of the fractals.
+The server acknowledges every message received by sending back a signal to the client.
+Unicode characters support!
 
-```bash
-make bonus
-./fractol_bonus [fractal_type]
-```
-```
-Replace [fractal_type] with the type of fractal to display (e.g., burning, rose, newton).
-```
+After compiling, start the server using ./server_bonus
+Note the server PID printed.
+Start the client using ./client_bonus <server_PID> "<string_to_send>".
+The server should promptly display the received string.
 
 ## Contributing
 

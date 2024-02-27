@@ -15,7 +15,7 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [ErrorHandling](#error-handling)
+- [Error Handling](#error-handling)
 - [Global Variables](#global-variables)
 - [Allowed Functions](#allowed-functions)
 - [Mandatory Part](#mandatory-part)

@@ -5,21 +5,18 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: francfer <francfer@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/30 11:15:33 by mulken            #+#    #+#             */
-/*   Updated: 2024/02/21 11:04:50 by francfer         ###   ########.fr       */
+/*   Created: 2024/02/27 12:14:58 by francfer          #+#    #+#             */
+/*   Updated: 2024/02/27 12:27:25 by francfer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINITALK_H
 # define MINITALK_H
 
-# include <signal.h>
+# include <sys/types.h>
 # include <unistd.h>
+# include <stdlib.h>
+# include <signal.h>
 # include "../Printf/ft_printf.h"
-
-int		ft_atoi(char *str);
-void	writing_signal(int x);
-void	handler(int x);
-void	sending_signal(int pid, char *str);
 
 #endif

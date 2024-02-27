@@ -5,12 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: francfer <francfer@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/30 11:12:08 by mulken            #+#    #+#             */
-/*   Updated: 2024/02/22 17:37:46 by francfer         ###   ########.fr       */
+/*   Created: 2024/02/27 12:15:30 by francfer          #+#    #+#             */
+/*   Updated: 2024/02/27 15:11:44 by francfer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minitalk.h"
+
+int	g_bit_control;
 
 int	ft_atoi(char *str)
 {
@@ -37,54 +39,71 @@ int	ft_atoi(char *str)
 	return (res * s);
 }
 
-void	ft_send_signal(int pid, char *str)
+void	send_char(char c, pid_t pid)
 {
-	int				i;
-	unsigned char	c;
+	int	bit;
 
-	while (*str)
+	bit = __CHAR_BIT__ * sizeof(c) - 1;
+	while (bit >= 0)
 	{
-		i = 7;
-		c = *str++;
-		while (i >= 0)
+		if (kill(pid, 0) < 0)
 		{
-			if ((c >> i) & 1)
-				kill(pid, SIGUSR1);
-			else
-				kill(pid, SIGUSR2);
-			usleep(100);
-			i--;
+			ft_printf("ERROR : cant send sig to pid : %d\n", pid);
+			exit(EXIT_FAILURE);
 		}
+		g_bit_control = 0;
+		if (c & (1 << bit))
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
+		bit--;
+		while (g_bit_control != 1)
+			usleep(10);
 	}
 }
 
-static void	server_ok(int x)
+void	send_str(char *str, pid_t pid)
 {
-	if (x == SIGUSR1)
+	int	cur;
+
+	cur = 0;
+	while (str[cur])
 	{
-		ft_printf("Mensaje Recibido!");
-		exit(0);
+		send_char(str[cur], pid);
+		cur++;
 	}
-	else
-		exit(1);
+	send_char(0, pid);
 }
 
-int	main(int argc, char *argv[])
+void	sig_usr(int sig)
 {
-	int	pid;
+	if (sig == SIGUSR1)
+		g_bit_control = 1;
+	else if (sig == SIGUSR2)
+	{
+		ft_printf("Message received !\n");
+		exit(EXIT_SUCCESS);
+	}
+}
 
-	pid = ft_atoi(argv[1]);
+int	main(int argc, char **argv)
+{
+	pid_t	pid;
+
 	if (argc != 3)
 	{
-		ft_printf("Error: wrong number of arguments\n");
-		return (0);
+		ft_printf("Usage : ./client <pid> <string to send>\n");
+		exit(EXIT_FAILURE);
 	}
-	else if (pid <= 0)
+	signal(SIGUSR1, &sig_usr);
+	signal(SIGUSR2, &sig_usr);
+	pid = ft_atoi(argv[1]);
+	if (!pid)
 	{
-		ft_printf("Error: wrong PID!\n");
-		return (0);
+		ft_printf("%s is an invalid pid\n", argv[1]);
+		exit(EXIT_FAILURE);
 	}
-	ft_send_signal(pid, argv[2]);
-	signal(SIGUSR1, server_ok);
-	pause();
+	send_str(argv[2], pid);
+	while (1)
+		sleep(1);
 }

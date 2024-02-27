@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: francfer <francfer@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/01/30 16:07:26 by mulken            #+#    #+#              #
-#    Updated: 2024/02/22 18:00:52 by francfer         ###   ########.fr        #
+#    Created: 2024/02/27 12:14:46 by francfer          #+#    #+#              #
+#    Updated: 2024/02/27 15:09:51 by francfer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,22 +32,38 @@ LIBFTPRINTF = $(LIBFTPRINTF_DIR)/libftprintf.a
 
 all: $(NAME)
 
-$(NAME): $(OBJSERVER) $(OBJSCLIENT)
-	@make -C $(LIBFTPRINTF_DIR)
-	gcc -o server $(OBJSERVER) $(CFLAGS) $(LIBFTPRINTF)
-	gcc -o client $(OBJSCLIENT) $(CFLAGS) $(LIBFTPRINTF)
+bonus: $(NAME_BONUS)
 
-$(SRCDIR)/%.o: $(SRCDIR)/%.c
+$(NAME): server client
+
+server: $(OBJSERVER)
+	@make -C $(LIBFTPRINTF_DIR)
+	gcc -o $@ $(OBJSERVER) $(CFLAGS) $(LIBFTPRINTF)
+
+client: $(OBJSCLIENT)
+	@make -C $(LIBFTPRINTF_DIR)
+	gcc -o $@ $(OBJSCLIENT) $(CFLAGS) $(LIBFTPRINTF)
+
+$(OBJSERVER): $(SRCDIR)/%.o: $(SRCDIR)/%.c
 	gcc $(CFLAGS) -c $< -o $@
 
-bonus : $(NAME_BONUS)
+$(OBJSCLIENT): $(SRCDIR)/%.o: $(SRCDIR)/%.c
+	gcc $(CFLAGS) -c $< -o $@
 
-$(NAME_BONUS): $(OBJSERVER_BONUS) $(OBJSCLIENT_BONUS)
+$(NAME_BONUS): server_bonus client_bonus
+
+server_bonus: $(OBJSERVER_BONUS)
 	@make -C $(LIBFTPRINTF_DIR)
-	gcc -o server_bonus $(OBJSERVER_BONUS) $(CFLAGS) $(LIBFTPRINTF)
-	gcc -o client_bonus $(OBJSCLIENT_BONUS) $(CFLAGS) $(LIBFTPRINTF)
+	gcc -o $@ $(OBJSERVER_BONUS) $(CFLAGS) $(LIBFTPRINTF)
 
-$(SRCDIR)/%.o: $(SRCDIR_BONUS)/%.c
+client_bonus: $(OBJSCLIENT_BONUS)
+	@make -C $(LIBFTPRINTF_DIR)
+	gcc -o $@ $(OBJSCLIENT_BONUS) $(CFLAGS) $(LIBFTPRINTF)
+
+$(OBJSERVER_BONUS): $(SRCDIR_BONUS)/%.o: $(SRCDIR_BONUS)/%.c
+	gcc $(CFLAGS) -c $< -o $@
+
+$(OBJSCLIENT_BONUS): $(SRCDIR_BONUS)/%.o: $(SRCDIR_BONUS)/%.c
 	gcc $(CFLAGS) -c $< -o $@
 
 clean:
@@ -63,7 +79,7 @@ fclean: clean
 
 norm: 
 	norminette
-	
+    
 re: fclean all
 
 .PHONY: all clean fclean re norm

@@ -6,7 +6,7 @@
 /*   By: francfer <francfer@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 12:15:09 by francfer          #+#    #+#             */
-/*   Updated: 2024/02/27 12:15:13 by francfer         ###   ########.fr       */
+/*   Updated: 2024/03/11 10:37:07 by francfer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,16 @@ void	sending_signal(int pid, char *str)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(100);
+			usleep(50);
 			i--;
 		}
 	}
+}
+
+
+void	leaks()
+{
+	system("leaks client");
 }
 
 int	main(int argc, char *argv[])
@@ -74,4 +80,5 @@ int	main(int argc, char *argv[])
 		return (0);
 	}
 	sending_signal(pid, argv[2]);
+	atexit(leaks);
 }

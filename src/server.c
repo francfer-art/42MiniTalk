@@ -6,7 +6,7 @@
 /*   By: francfer <francfer@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 12:15:19 by francfer          #+#    #+#             */
-/*   Updated: 2024/02/27 12:15:22 by francfer         ###   ########.fr       */
+/*   Updated: 2024/03/11 10:37:22 by francfer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ void	handler(int x)
 		writing_signal(0);
 }
 
+void	leaks()
+{
+	system("leaks server");
+}
+
 int	main(void)
 {
 	int	pid;
@@ -46,4 +51,5 @@ int	main(void)
 	signal(SIGUSR2, handler);
 	while (1)
 		pause();
+	atexit(leaks);
 }
